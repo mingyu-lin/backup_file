@@ -1,0 +1,12 @@
+﻿msvc2022_64/
+OpenSSL-Win64/
+out/
+.vs/
+*.obj
+*.exe
+*.pdb
+*.idb
+*.ilk
+CMakeFiles/
+CMakeCache.txt
+build/
