@@ -1,19 +1,25 @@
-# Qt_back_up_project_uestc
-## 说明：
-电子科技大学软件开发综合实验 文件备份系统
+# backup_file
+## 简介：
+文件备份系统
 ## 环境配置：
-windows系统、visual studio 2019、C++ 17及以上、QT 5以上
-## QT 安装:
-安装教程：https://blog.csdn.net/m0_62919535/article/details/129340079  
-注：只需要安装完QT即可，后续vs studio上的QT插件可选择安装(QT安装过程中选择组件里必须勾选MSVC 2019 64-bit)
-## 依赖库安装：
-1. OpenSSL库：
-安装地址：http://slproweb.com/products/Win32OpenSSL.html  
-具体安装过程：https://blog.csdn.net/zyhse/article/details/108186278  
-将OpenSSL-Win64文件夹加到该项目中
-3. msvc2019_64库：
-找到QT所在目录，将E:\Qt\6.6.1\msvc2019_64文件夹复制到该项目中
-## 环境变量设置：
-将 .../msvc2019_64/bin 放到系统环境变量中
-## 代码运行：
-用visual studio 2019 打开该cmakelist项目并运行
+windows系统、VS2022、C++ 17及以上、QT 6以上，openssl win64
+1. **安装依赖**
+
+   * 下载并安装 **Qt 6**（安装时务必勾选 *MSVC* 支持）。
+   * 下载并安装 **OpenSSL**（Win64 版本）。
+2. **获取项目代码**
+
+   * 通过 Visual Studio 图形化界面或命令行，将本项目仓库 `clone` 到本地。
+
+3. **准备环境**
+
+   * 将 `OpenSSL-Win64` 和 `msvc2022_64`（位于 Qt 6.9.2 安装目录下）两个文件夹复制到本项目目录。
+   * 在系统环境变量 `Path` 中添加以下路径：
+
+     * `D:\openssl\OpenSSL-Win64\bin`
+     * `C:\Users\30281\source\repos\back_up\msvc2022_64\bin`
+       
+4. **编译与运行**
+
+   * 使用 Visual Studio 打开项目目录中的 `CMakeLists.txt` 文件。
+   * 配置并生成解决方案后即可进行编译与运行。
