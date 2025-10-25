@@ -1,74 +1,102 @@
 #include "QtMainWindow.h"
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QDebug>
 
 int RadioButton_flag = 0;
 
-QtMainWindow::QtMainWindow(QWidget *parent)
-	: QWidget(parent)
+QtMainWindow::QtMainWindow(QWidget* parent)
+    : QWidget(parent)
 {
-	ui.setupUi(this);
-	this->setFixedSize(600, 600);
-	RadioButton_flag = 0;
+    ui.setupUi(this);
+    this->setFixedSize(600, 400); // 窗口尺寸更紧凑
+    this->setWindowTitle("Backup & Restore");
 
-	// 创建分组对象
-	Group = new QGroupBox(this);
-	Group->setTitle("backup or restore");
-	Group->setGeometry(30, 50, 200, 100);
-	
-	// 创建两个单选框对象
-	backup_b = new QRadioButton("backup", Group);
-	restore_b = new QRadioButton("restore", Group);
+    RadioButton_flag = 0;
 
-	// 备份选项为默认值
-	backup_b->setChecked(true);
+    // 创建分组对象
+    QGroupBox* group = new QGroupBox("Choose an action:", this);
+    QRadioButton* backup_b = new QRadioButton("Backup");
+    QRadioButton* restore_b = new QRadioButton("Restore");
+    backup_b->setChecked(true);
 
-	// 获取RadioButton值
-	connect(backup_b, &QRadioButton::toggled, [=](bool isChecked) {
-		if (isChecked == true)
-			RadioButton_flag = 0;
-		else if (isChecked == false)
-			RadioButton_flag = 1;
-		});
+    // 获取RadioButton值
+    connect(backup_b, &QRadioButton::toggled, [=](bool isChecked) {
+        RadioButton_flag = isChecked ? 0 : 1;
+        });
 
-	// 创建布局: 垂直布局, 指定其父对象为分组控件
-	Layout = new QVBoxLayout(Group);
-	Layout->addWidget(backup_b);
-	Layout->addWidget(restore_b);
+    // 分组内部布局（垂直）
+    QVBoxLayout* groupLayout = new QVBoxLayout;
+    groupLayout->addWidget(backup_b);
+    groupLayout->addWidget(restore_b);
+    group->setLayout(groupLayout);
 
-	// 将布局控件添加到组中
-	Group->setLayout(Layout);
+    // 创建按钮
+    QPushButton* next_b = new QPushButton("Next");
+    QPushButton* close_b = new QPushButton("Close");
 
-	// 创建next按钮
-	QPushButton* next_b = new QPushButton(this);
-	next_b->setText("next");
-	next_b->move(420, 550);
-	connect(next_b, &QPushButton::released, this, &QtMainWindow::next);
+    connect(next_b, &QPushButton::clicked, this, &QtMainWindow::next);
+    connect(close_b, &QPushButton::clicked, this, &QtMainWindow::close);
 
-	// 创建close按钮
-	QPushButton* close_b = new QPushButton(this);
-	close_b->setText("close");
-	close_b->move(500, 550);
-	connect(close_b, &QPushButton::released, this, &QtMainWindow::close);
+    // 按钮水平布局
+    QHBoxLayout* buttonLayout = new QHBoxLayout;
+    buttonLayout->addStretch();        // 让按钮靠右
+    buttonLayout->addWidget(next_b);
+    buttonLayout->addWidget(close_b);
+
+    // 主布局
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(group);
+    mainLayout->addStretch();          // 拉伸空白区域
+    mainLayout->addLayout(buttonLayout);
+    mainLayout->setContentsMargins(30, 30, 30, 30);
+    mainLayout->setSpacing(20);
+
+    this->setLayout(mainLayout);
+
+    // 样式优化
+    this->setStyleSheet(R"(
+        QGroupBox {
+            font-weight: bold;
+            border: 2px solid #6CA6CD;
+            border-radius: 8px;
+            margin-top: 10px;
+            padding: 10px;
+        }
+        QPushButton {
+            background-color: #4A90E2;
+            color: white;
+            font-size: 14px;
+            padding: 6px 16px;
+            border-radius: 6px;
+        }
+        QPushButton:hover {
+            background-color: #357ABD;
+        }
+        QPushButton:pressed {
+            background-color: #2E5E9E;
+        }
+    )");
 }
 
-QtMainWindow::~QtMainWindow()
-{}
+QtMainWindow::~QtMainWindow() {}
 
 void QtMainWindow::next()
 {
-	if (RadioButton_flag == 0) {
-		qDebug() << "backup";
-		this->close();
-		QtBackupWindow* pic = new QtBackupWindow();
-		pic->show();
-	}
-
-	else if (RadioButton_flag == 1) {
-		this->close();
-		QtRestoreWindow* pic = new QtRestoreWindow();
-		pic->show();
-		qDebug() << "restore";
-	}
-
-	else qDebug() << "error";
+    if (RadioButton_flag == 0) {
+        qDebug() << "backup";
+        this->close();
+        QtBackupWindow* pic = new QtBackupWindow();
+        pic->show();
+    }
+    else if (RadioButton_flag == 1) {
+        qDebug() << "restore";
+        this->close();
+        QtRestoreWindow* pic = new QtRestoreWindow();
+        pic->show();
+    }
+    else {
+        qDebug() << "error";
+    }
 }
-
